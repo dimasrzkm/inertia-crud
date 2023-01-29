@@ -5,9 +5,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { useForm } from "@inertiajs/inertia-react";
 import React from "react";
-import Card from "../../Components/Card";
 import Dropdown from "../../Components/Dropdown";
+import Dialog from "../../Components/Dialog";
 import App from "../../Layouts/App";
+import useDialog from "../../Hooks/useDialog";
 
 export default function Index({ users }) {
     const { data, setData, post, errors, reset } = useForm({
@@ -17,6 +18,7 @@ export default function Index({ users }) {
         email: "",
         password: "",
     });
+    const [modalAdd, closeModal, modalUser] = useDialog();
     const changeHandler = (e) => {
         setData({
             ...data,
@@ -27,115 +29,124 @@ export default function Index({ users }) {
         e.preventDefault();
         post(route("users.store"), {
             data,
-            onSuccess: reset(),
+            onSuccess: () => {
+                reset(), closeModal();
+            },
         });
     };
     return (
         <>
-            <Card>
-                <h2 className="card-title">Add user</h2>
-                <form onSubmit={storeUserHandler}>
-                    <div className="form-control w-full max-w-xs">
-                        <label className="label" htmlFor="name">
-                            <span className="label-text">Name</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            placeholder="john doe"
-                            className="input input-bordered w-full max-w-xs"
-                            value={data.name}
-                            onChange={changeHandler}
-                        />
-                        {errors.name && (
-                            <span className="text-red-400 tracking-tight">
-                                {errors.name}
-                            </span>
-                        )}
-                    </div>
-                    <div className="form-control w-full max-w-xs">
-                        <label className="label" htmlFor="username">
-                            <span className="label-text">Username</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            placeholder="johndoe"
-                            className="input input-bordered w-full max-w-xs"
-                            value={data.username}
-                            onChange={changeHandler}
-                        />
-                        {errors.username && (
-                            <span className="text-red-400 tracking-tight">
-                                {errors.username}
-                            </span>
-                        )}
-                    </div>
-                    <div className="form-control w-full max-w-xs">
-                        <label className="label" htmlFor="email">
-                            <span className="label-text">Email</span>
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="johndoe@gmail.com"
-                            className="input input-bordered w-full max-w-xs"
-                            value={data.email}
-                            onChange={changeHandler}
-                        />
-                        {errors.email && (
-                            <span className="text-red-400 tracking-tight">
-                                {errors.email}
-                            </span>
-                        )}
-                    </div>
-                    <div className="form-control w-full max-w-xs">
-                        <label className="label" htmlFor="password">
-                            <span className="label-text">Password</span>
-                        </label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="*******"
-                            className="input input-bordered w-full max-w-xs"
-                            value={data.password}
-                            onChange={changeHandler}
-                        />
-                        {errors.password && (
-                            <span className="text-red-400 tracking-tight">
-                                {errors.password}
-                            </span>
-                        )}
-                    </div>
-                    <div className="form-control w-full max-w-xs">
-                        <label className="label" htmlFor="address">
-                            <span className="label-text">Address</span>
-                        </label>
-                        <textarea
-                            className="textarea border border-gray-300"
-                            placeholder="Jln. ikan no.03"
-                            id="address"
-                            name="address"
-                            value={data.address}
-                            onChange={changeHandler}
-                        />
-                        {errors.address && (
-                            <span className="text-red-400 tracking-tight">
-                                {errors.address}
-                            </span>
-                        )}
-                    </div>
-                    <div className="card-actions justify-end mt-3">
-                        <button type="submit" className="btn btn-primary">
-                            Save
-                        </button>
-                    </div>
-                </form>
-            </Card>
+            <div className="container">
+                <button className="mb-5 btn" onClick={modalAdd}>
+                    Add user
+                </button>
+                <Dialog ref={modalUser} className="z-50">
+                    <h2 className="card-title">Add user</h2>
+                    <form onSubmit={storeUserHandler}>
+                        <div className="w-full form-control ">
+                            <label className="w-full label" htmlFor="name">
+                                <span className="label-text">Name</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="john doe"
+                                className="w-full input input-bordered "
+                                value={data.name}
+                                onChange={changeHandler}
+                            />
+                            {errors.name && (
+                                <span className="tracking-tight text-red-400">
+                                    {errors.name}
+                                </span>
+                            )}
+                        </div>
+                        <div className="w-full form-control ">
+                            <label className="label" htmlFor="username">
+                                <span className="label-text">Username</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="username"
+                                placeholder="johndoe"
+                                className="w-full input input-bordered "
+                                value={data.username}
+                                onChange={changeHandler}
+                            />
+                            {errors.username && (
+                                <span className="tracking-tight text-red-400">
+                                    {errors.username}
+                                </span>
+                            )}
+                        </div>
+                        <div className="w-full form-control ">
+                            <label className="label" htmlFor="email">
+                                <span className="label-text">Email</span>
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="johndoe@gmail.com"
+                                className="w-full input input-bordered "
+                                value={data.email}
+                                onChange={changeHandler}
+                            />
+                            {errors.email && (
+                                <span className="tracking-tight text-red-400">
+                                    {errors.email}
+                                </span>
+                            )}
+                        </div>
+                        <div className="w-full form-control ">
+                            <label className="label" htmlFor="password">
+                                <span className="label-text">Password</span>
+                            </label>
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="*******"
+                                className="w-full input input-bordered "
+                                value={data.password}
+                                onChange={changeHandler}
+                            />
+                            {errors.password && (
+                                <span className="tracking-tight text-red-400">
+                                    {errors.password}
+                                </span>
+                            )}
+                        </div>
+                        <div className="w-full form-control ">
+                            <label className="label" htmlFor="address">
+                                <span className="label-text">Address</span>
+                            </label>
+                            <textarea
+                                className="border border-gray-300 textarea"
+                                placeholder="Jln. ikan no.03"
+                                name="address"
+                                value={data.address}
+                                onChange={changeHandler}
+                            />
+                            {errors.address && (
+                                <span className="tracking-tight text-red-400">
+                                    {errors.address}
+                                </span>
+                            )}
+                        </div>
+                        <div className="justify-end mt-3 card-actions">
+                            <button
+                                type="button"
+                                className="btn"
+                                onClick={closeModal}
+                            >
+                                Cancel
+                            </button>
+                            <button type="submit" className="btn">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </Dialog>
+            </div>
             <div className="overflow-x-auto">
                 <table className="table w-full">
                     <thead>
@@ -159,19 +170,19 @@ export default function Index({ users }) {
                                 <td>
                                     <Dropdown
                                         icons={
-                                            <EllipsisVerticalIcon className="h-5 w-5" />
+                                            <EllipsisVerticalIcon className="w-5 h-5" />
                                         }
                                     >
                                         <li>
                                             <a className="inline-flex justify-between">
                                                 Edit
-                                                <PencilIcon className="h-5 w-5" />
+                                                <PencilIcon className="w-5 h-5" />
                                             </a>
                                         </li>
                                         <li>
                                             <a className="inline-flex justify-between">
                                                 Delete
-                                                <TrashIcon className="h-5 w-5" />
+                                                <TrashIcon className="w-5 h-5" />
                                             </a>
                                         </li>
                                     </Dropdown>

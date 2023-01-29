@@ -15,7 +15,7 @@ export default function App({ children }) {
     }, [flash.message]);
     return (
         <>
-            <Toaster position="top-right" />
+            <Toaster position="bottom-right" />
             <div className="drawer drawer-mobile">
                 <input
                     id="my-drawer-2"
@@ -24,7 +24,7 @@ export default function App({ children }) {
                 />
                 <div className="drawer-content">
                     {/* Navbar */}
-                    <div className="navbar bg-base-100 shadow-sm sticky top-0 z-30 bg-opacity-90 backdrop-blur">
+                    <div className="sticky top-0 z-30 shadow-sm navbar bg-base-100 bg-opacity-90 backdrop-blur">
                         <div className="navbar-start">
                             <div>
                                 <label
@@ -33,7 +33,7 @@ export default function App({ children }) {
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        className="h-5 w-5"
+                                        className="w-5 h-5"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
@@ -47,21 +47,25 @@ export default function App({ children }) {
                                     </svg>
                                 </label>
                             </div>
-                            <a className="btn btn-ghost normal-case text-xl">
+                            <a className="text-xl normal-case btn btn-ghost">
                                 Inertia-CRUD
                             </a>
                         </div>
                         <div className="navbar-end">
-                            <h2>{auth.user.name}</h2>
                             <Dropdown
                                 icons={
-                                    <EllipsisHorizontalIcon className="h-5 w-5" />
+                                    <EllipsisHorizontalIcon className="w-5 h-5" />
                                 }
                             >
                                 <li>
+                                    <p className="inline-flex justify-between leading-tight">
+                                        {auth.user.name}
+                                    </p>
+                                </li>
+                                <li>
                                     <a className="inline-flex justify-between">
                                         Profile
-                                        <UserCircleIcon className="h-5 w-5" />
+                                        <UserCircleIcon className="w-5 h-5" />
                                     </a>
                                 </li>
                                 <li>
@@ -72,7 +76,7 @@ export default function App({ children }) {
                                         className="inline-flex justify-between"
                                     >
                                         Logout
-                                        <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                                        <ArrowRightOnRectangleIcon className="w-5 h-5" />
                                     </Link>
                                 </li>
                             </Dropdown>
@@ -87,17 +91,17 @@ export default function App({ children }) {
                         htmlFor="my-drawer-2"
                         className="drawer-overlay"
                     ></label>
-                    <ul className="menu p-4 w-80 bg-base-200 text-base-content">
+                    <ul className="p-4 menu w-80 bg-base-200 text-base-content">
                         <Link
                             as="button"
                             href={route("dashboard")}
-                            className="text-2xl text-center z-20 bg-base-200 bg-opacity-90 backdrop-blur sticky top-0 px-4 py-3 shadow-sm"
+                            className="sticky top-0 z-20 px-4 py-3 text-2xl text-center shadow-sm bg-base-200 bg-opacity-90 backdrop-blur"
                         >
                             Dashboard
                         </Link>
                         <li>
                             <Link href={route("users.index")}>
-                                <UserCircleIcon className="h-5 w-5" />
+                                <UserCircleIcon className="w-5 h-5" />
                                 Users
                             </Link>
                         </li>
