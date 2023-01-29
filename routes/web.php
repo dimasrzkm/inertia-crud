@@ -15,6 +15,6 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function (){
     Route::get('dashboard', DashboardController::class)->name('dashboard');
-    Route::resource('users', UserController::class);
+    Route::apiResource('users', UserController::class);
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
