@@ -3,14 +3,15 @@ import {
     PencilIcon,
     TrashIcon,
 } from "@heroicons/react/24/outline";
-import { useForm } from "@inertiajs/inertia-react";
+import { Link, useForm } from "@inertiajs/inertia-react";
 import React from "react";
 import Dropdown from "../../Components/Dropdown";
 import Dialog from "../../Components/Dialog";
 import App from "../../Layouts/App";
 import useDialog from "../../Hooks/useDialog";
+import Pagination from "../../Components/Pagination";
 
-export default function Index({ users }) {
+export default function Index(props) {
     const { data, setData, post, errors, reset } = useForm({
         name: "",
         username: "",
@@ -18,6 +19,8 @@ export default function Index({ users }) {
         email: "",
         password: "",
     });
+    // pagination
+    const { data: users, links, from } = props.users;
     const [modalAdd, closeModal, modalUser] = useDialog();
     const changeHandler = (e) => {
         setData({
@@ -162,7 +165,7 @@ export default function Index({ users }) {
                     <tbody>
                         {users.map((user, index) => (
                             <tr key={user.id}>
-                                <th>{index + 1}</th>
+                                <th>{from + index}</th>
                                 <td>{user.name}</td>
                                 <td>{user.username}</td>
                                 <td>{user.email}</td>
@@ -192,6 +195,7 @@ export default function Index({ users }) {
                     </tbody>
                 </table>
             </div>
+            <Pagination links={links} />
         </>
     );
 }
