@@ -3,13 +3,15 @@ import {
     PencilIcon,
     TrashIcon,
 } from "@heroicons/react/24/outline";
-import { Link, useForm } from "@inertiajs/inertia-react";
+import { useForm } from "@inertiajs/inertia-react";
 import React from "react";
 import Dropdown from "../../Components/Dropdown";
 import Dialog from "../../Components/Dialog";
 import App from "../../Layouts/App";
 import useDialog from "../../Hooks/useDialog";
 import Pagination from "../../Components/Pagination";
+import { Inertia } from "@inertiajs/inertia";
+import FormUser from "../../Components/User/FormUser";
 
 export default function Index(props) {
     const { data, setData, post, put, errors, reset } = useForm({
@@ -21,8 +23,10 @@ export default function Index(props) {
     });
     // pagination
     const { data: users, links, from } = props.users;
+    // modal
     const [openModalAdd, closeModalAdd, modalUser] = useDialog();
     const [openModalEdit, closeModalEdit, modalEdit] = useDialog();
+    const [openModalDelete, closeModalDelete, modalDelete] = useDialog();
     const changeHandler = (e) => {
         setData({
             ...data,
@@ -51,6 +55,19 @@ export default function Index(props) {
             },
         });
     };
+    const openDeleteDialog = (user) => {
+        setData(user);
+        openModalDelete();
+    };
+    const deleteUserHandler = (e) => {
+        e.preventDefault();
+        Inertia.delete(route("users.destroy", data.id), {
+            data,
+            onSuccess: () => {
+                reset(), closeModalDelete();
+            },
+        });
+    };
     return (
         <>
             <div className="container">
@@ -59,217 +76,46 @@ export default function Index(props) {
                 </button>
                 <Dialog ref={modalUser}>
                     <h2 className="card-title">Add user</h2>
-                    <form onSubmit={storeUserHandler}>
-                        <div className="w-full form-control ">
-                            <label className="w-full label" htmlFor="name">
-                                <span className="label-text">Name</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="john doe"
-                                className="w-full input input-bordered "
-                                value={data.name}
-                                onChange={changeHandler}
-                            />
-                            {errors.name && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.name}
-                                </span>
-                            )}
-                        </div>
-                        <div className="w-full form-control ">
-                            <label className="label" htmlFor="username">
-                                <span className="label-text">Username</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="username"
-                                placeholder="johndoe"
-                                className="w-full input input-bordered "
-                                value={data.username}
-                                onChange={changeHandler}
-                            />
-                            {errors.username && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.username}
-                                </span>
-                            )}
-                        </div>
-                        <div className="w-full form-control ">
-                            <label className="label" htmlFor="email">
-                                <span className="label-text">Email</span>
-                            </label>
-                            <input
-                                type="email"
-                                name="email"
-                                placeholder="johndoe@gmail.com"
-                                className="w-full input input-bordered "
-                                value={data.email}
-                                onChange={changeHandler}
-                            />
-                            {errors.email && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.email}
-                                </span>
-                            )}
-                        </div>
-                        <div className="w-full form-control ">
-                            <label className="label" htmlFor="password">
-                                <span className="label-text">Password</span>
-                            </label>
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="*******"
-                                className="w-full input input-bordered "
-                                value={data.password}
-                                onChange={changeHandler}
-                            />
-                            {errors.password && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.password}
-                                </span>
-                            )}
-                        </div>
-                        <div className="w-full form-control ">
-                            <label className="label" htmlFor="address">
-                                <span className="label-text">Address</span>
-                            </label>
-                            <textarea
-                                className="border border-gray-300 textarea"
-                                placeholder="Jln. ikan no.03"
-                                name="address"
-                                value={data.address}
-                                onChange={changeHandler}
-                            />
-                            {errors.address && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.address}
-                                </span>
-                            )}
-                        </div>
-                        <div className="justify-end mt-3 card-actions">
-                            <button
-                                type="button"
-                                className="btn"
-                                onClick={closeModalAdd}
-                            >
-                                Cancel
-                            </button>
-                            <button type="submit" className="btn">
-                                Save
-                            </button>
-                        </div>
-                    </form>
+                    <FormUser
+                        handler={storeUserHandler}
+                        data={data}
+                        changeHandler={changeHandler}
+                        closeHandler={closeModalAdd}
+                        errors={errors}
+                        reset={reset}
+                    />
                 </Dialog>
                 <Dialog ref={modalEdit}>
                     <h2 className="card-title">Edit user</h2>
-                    <form onSubmit={updateUserHandler}>
-                        <div className="w-full form-control ">
-                            <label className="w-full label" htmlFor="name">
-                                <span className="label-text">Name</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="john doe"
-                                className="w-full input input-bordered "
-                                value={data.name}
-                                onChange={changeHandler}
-                            />
-                            {errors.name && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.name}
-                                </span>
-                            )}
-                        </div>
-                        <div className="w-full form-control ">
-                            <label className="label" htmlFor="username">
-                                <span className="label-text">Username</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="username"
-                                placeholder="johndoe"
-                                className="w-full input input-bordered "
-                                value={data.username}
-                                onChange={changeHandler}
-                            />
-                            {errors.username && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.username}
-                                </span>
-                            )}
-                        </div>
-                        <div className="w-full form-control ">
-                            <label className="label" htmlFor="email">
-                                <span className="label-text">Email</span>
-                            </label>
-                            <input
-                                type="email"
-                                name="email"
-                                placeholder="johndoe@gmail.com"
-                                className="w-full input input-bordered "
-                                value={data.email}
-                                onChange={changeHandler}
-                            />
-                            {errors.email && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.email}
-                                </span>
-                            )}
-                        </div>
-                        <div className="w-full form-control ">
-                            <label className="label" htmlFor="password">
-                                <span className="label-text">Password</span>
-                            </label>
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="*******"
-                                className="w-full input input-bordered "
-                                value={data.password}
-                                onChange={changeHandler}
-                            />
-                            {errors.password && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.password}
-                                </span>
-                            )}
-                        </div>
-                        <div className="w-full form-control ">
-                            <label className="label" htmlFor="address">
-                                <span className="label-text">Address</span>
-                            </label>
-                            <textarea
-                                className="border border-gray-300 textarea"
-                                placeholder="Jln. ikan no.03"
-                                name="address"
-                                value={data.address}
-                                onChange={changeHandler}
-                            />
-                            {errors.address && (
-                                <span className="tracking-tight text-red-400">
-                                    {errors.address}
-                                </span>
-                            )}
-                        </div>
-                        <div className="justify-end mt-3 card-actions">
-                            <button
-                                type="button"
-                                className="btn"
-                                onClick={() => {
-                                    closeModalEdit(), reset();
-                                }}
-                            >
-                                Cancel
-                            </button>
-                            <button type="submit" className="btn">
-                                Update
-                            </button>
-                        </div>
-                    </form>
+                    <FormUser
+                        handler={updateUserHandler}
+                        data={data}
+                        changeHandler={changeHandler}
+                        closeHandler={closeModalEdit}
+                        errors={errors}
+                        reset={reset}
+                    />
+                </Dialog>
+                <Dialog ref={modalDelete}>
+                    <h2 className="card-title">
+                        Are you sure delete user : {data.name}
+                    </h2>
+                    <div className="justify-end py-5 card-actions">
+                        <button
+                            className="btn"
+                            onClick={() => {
+                                reset(), closeModalDelete();
+                            }}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className="bg-red-500 border-none btn hover:bg-red-600"
+                            onClick={deleteUserHandler}
+                        >
+                            Delete
+                        </button>
+                    </div>
                 </Dialog>
             </div>
             <div className="overflow-x-auto">
@@ -310,10 +156,15 @@ export default function Index(props) {
                                             </button>
                                         </li>
                                         <li>
-                                            <a className="inline-flex justify-between">
+                                            <button
+                                                className="inline-flex justify-between"
+                                                onClick={() => [
+                                                    openDeleteDialog(user),
+                                                ]}
+                                            >
                                                 Delete
                                                 <TrashIcon className="w-5 h-5" />
-                                            </a>
+                                            </button>
                                         </li>
                                     </Dropdown>
                                 </td>
