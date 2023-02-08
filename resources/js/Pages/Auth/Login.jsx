@@ -1,4 +1,4 @@
-import { useForm, usePage } from "@inertiajs/inertia-react";
+import { useForm, usePage } from "@inertiajs/react";
 import React, { useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import Card from "../../Components/Card";

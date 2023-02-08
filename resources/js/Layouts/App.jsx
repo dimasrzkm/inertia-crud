@@ -4,7 +4,7 @@ import {
     EllipsisHorizontalIcon,
     UserCircleIcon,
 } from "@heroicons/react/24/outline";
-import { Link, usePage } from "@inertiajs/inertia-react";
+import { Link, usePage } from "@inertiajs/react";
 import { toast, Toaster } from "react-hot-toast";
 import Dropdown from "../Components/Dropdown";
 

@@ -3,9 +3,9 @@ import "../css/app.css";
 
 import React from "react";
 import { render } from "react-dom";
-import { createInertiaApp } from "@inertiajs/inertia-react";
-import { InertiaProgress } from "@inertiajs/progress";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+
+import { createInertiaApp } from "@inertiajs/react";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
@@ -20,6 +20,5 @@ createInertiaApp({
     setup({ el, App, props }) {
         return render(<App {...props} />, el);
     },
+    progress: { color: "#4B5563", showSpinner: true },
 });
-
-InertiaProgress.init({ color: "#4B5563", showSpinner: true });

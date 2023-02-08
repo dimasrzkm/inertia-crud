@@ -3,14 +3,14 @@ import {
     PencilIcon,
     TrashIcon,
 } from "@heroicons/react/24/outline";
-import { useForm } from "@inertiajs/inertia-react";
+import { useForm } from "@inertiajs/react";
 import React from "react";
 import Dropdown from "../../Components/Dropdown";
 import Dialog from "../../Components/Dialog";
 import App from "../../Layouts/App";
 import useDialog from "../../Hooks/useDialog";
 import Pagination from "../../Components/Pagination";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/react";
 import FormUser from "../../Components/User/FormUser";
 
 export default function Index(props) {
@@ -61,7 +61,7 @@ export default function Index(props) {
     };
     const deleteUserHandler = (e) => {
         e.preventDefault();
-        Inertia.delete(route("users.destroy", data.id), {
+        router.delete(route("users.destroy", data.id), {
             data,
             onSuccess: () => {
                 reset(), closeModalDelete();
